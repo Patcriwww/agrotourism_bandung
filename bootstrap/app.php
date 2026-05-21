@@ -11,6 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
   ->withMiddleware(function ($middleware) {
+    // Trust all proxies so Laravel reads X-Forwarded-Proto from Railway's
+    // edge and generates correct HTTPS URLs for assets and redirects.
+    $middleware->trustProxies(at: '*');
+
     $middleware->alias([
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

@@ -300,7 +300,7 @@ a.footer-link:hover {
             resumeBaseUrl: '{{ url('/pembayaran/lanjut') }}'
         };
     </script>
-    <script src="{{ asset('frontend/js/booking.js') }}?v={{ time() }}"></script>
+    <script src="{{ secure_asset('frontend/js/booking.js') }}?v={{ time() }}"></script>
 @endif
 
 <script>
