@@ -7,6 +7,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Throwable;
 
@@ -25,6 +26,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS when running behind Railway's reverse proxy.
+        // Railway terminates TLS at the edge and forwards requests over HTTP
+        // internally, so Laravel must be told to trust the proxy and always
+        // generate HTTPS URLs — otherwise asset(), url(), and route() all
+        // produce http:// links that browsers block as Mixed Content.
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         Paginator::useBootstrapFive();
 
         $this->loadDatabaseSettings();
